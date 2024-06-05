@@ -4,15 +4,15 @@
 #include <SPI.h>
 #include <SoftwareSerial.h>
 
-// Configuração do Acelerômetro ADXL345
+//  ADXL345 Config
 Adafruit_ADXL345_Unified accel = Adafruit_ADXL345_Unified(12345);
 
-// Configuração do RFID RC522
+// RFID RC522 Config
 #define RST_PIN         9
 #define SS_PIN          10
 MFRC522 mfrc522(SS_PIN, RST_PIN);
 
-// Configuração do Bluetooth HC-06
+// HC-06 Config
 #define BT_SERIAL_RX    2
 #define BT_SERIAL_TX    3
 SoftwareSerial btSerial(BT_SERIAL_RX, BT_SERIAL_TX);
@@ -21,13 +21,13 @@ void setup() {
   Serial.begin(9600);
   btSerial.begin(9600);
 
-  // Inicialização do acelerômetro
+  //ADXL345 Init
   if(!accel.begin()) {
     Serial.println("Não foi possível encontrar o sensor ADXL345");
     while(1);
   }
 
-  // Inicialização do RFID
+  // RC522 Config
   SPI.begin();
   mfrc522.PCD_Init();
 
@@ -35,7 +35,7 @@ void setup() {
 }
 
 void loop() {
-  // Leitura do acelerômetro
+  // Accel reading
   sensors_event_t event;
   accel.getEvent(&event);
   Serial.print("Acelerômetro - X: ");
@@ -45,7 +45,7 @@ void loop() {
   Serial.print(", Z: ");
   Serial.println(event.acceleration.z);
 
-  // Leitura do RFID
+  // RFID reading
   if (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial()) {
     Serial.println("RFID detectado:");
     String content = "";
@@ -59,5 +59,5 @@ void loop() {
     mfrc522.PICC_HaltA();
   }
 
-  delay(1000); // Aguarda 1 segundo
+  delay(1000); 
 }
